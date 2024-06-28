@@ -12,7 +12,7 @@
 
 .filter-container input {
   padding: 10px;
-  border: 2px solid #ccc;
+  border: 2px solid black !important;
   border-radius: 5px;
   width: 200px;
   font-size: 16px;
@@ -36,6 +36,3 @@
   background-color: #f4f4f4;
 }
 
-.user-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
