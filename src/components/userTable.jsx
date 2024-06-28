@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { getUsers } from '../services/userService';
+import './userTable.css';
 
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
+  const [filter, setFilter] = useState('');
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,10 +21,27 @@ const UserTable = () => {
     fetchData();
   }, []);
 
+ const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+
+const filteredUsers = users.filter(user =>
+    `${user.firstName} ${user.lastName}`.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <div className="user-table-container">
       <h2>User List</h2>
-      {users.length > 0 ? (
+      <div className="filter-container">
+
+        <input
+          type="text"
+          placeholder="Name Filter"
+          value={filter}
+          onChange={handleFilterChange}
+        />
+      </div>
+      {filteredUsers.length > 0 ? (
         <table className="user-table">
           <thead>
             <tr>
@@ -34,7 +54,7 @@ const UserTable = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
+            {filteredUsers.map(user => (
               <tr key={user.id}>
                 <td>{user.id}</td>
                 <td>{user.firstName}</td>
