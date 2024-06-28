@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getUsers } from '../services/userService';
 import './userTable.css';
-
+import Filter from '../components/filter/filter.jsx';
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
@@ -34,12 +34,7 @@ const filteredUsers = users.filter(user =>
       <h2>User List</h2>
       <div className="filter-container">
 
-        <input
-          type="text"
-          placeholder="Name Filter"
-          value={filter}
-          onChange={handleFilterChange}
-        />
+       <Filter filter={filter} onFilterChange={handleFilterChange} />
       </div>
       {filteredUsers.length > 0 ? (
         <table className="user-table">
