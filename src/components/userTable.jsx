@@ -6,12 +6,15 @@ import Filter from '../components/filter/filter.jsx';
 const UserTable = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState('');
-
+  const [selectedCity, setSelectedCity] = useState('');
+  const [cities, setCities] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const usersData = await getUsers();
+        const uniqueCities = [...new Set(usersData.map(user => user.address.city))];
+        setCities(uniqueCities);
         setUsers(usersData);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -21,20 +24,31 @@ const UserTable = () => {
     fetchData();
   }, []);
 
- const handleFilterChange = (event) => {
+  const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
 
-const filteredUsers = users.filter(user =>
-    `${user.firstName} ${user.lastName}`.toLowerCase().includes(filter.toLowerCase())
-  );
+  const handleCityChange = (event) => {
+    setSelectedCity(event.target.value);
+  };
+
+  const filteredUsers = users.filter(user => {
+    const nameMatches = `${user.firstName} ${user.lastName}`.toLowerCase().includes(filter.toLowerCase());
+    const cityMatches = selectedCity === '' || user.address.city === selectedCity;
+    return nameMatches && cityMatches;
+  });
 
   return (
     <div className="user-table-container">
       <h2>User List</h2>
       <div className="filter-container">
-
-       <Filter filter={filter} onFilterChange={handleFilterChange} />
+        <Filter
+          filter={filter}
+          onFilterChange={handleFilterChange}
+          cities={cities}
+          selectedCity={selectedCity}
+          onCityChange={handleCityChange}
+        />
       </div>
       {filteredUsers.length > 0 ? (
         <table className="user-table">
