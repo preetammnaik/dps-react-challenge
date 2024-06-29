@@ -68,7 +68,6 @@ const UserTable = () => {
 
   return (
     <div className="user-table-container">
-      <h2>User List</h2>
       <div className="filter-container">
         <Filter
           filter={filter}
@@ -107,7 +106,8 @@ const UserTable = () => {
           </tbody>
         </table>
       ) : (
-        <p>Loading users...</p>
+        <p>Hmmm. Can't find the user. Maybe they took a coffee break?</p>
+
       )}
     </div>
   );
