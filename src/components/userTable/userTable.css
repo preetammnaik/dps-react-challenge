@@ -25,9 +25,14 @@
   padding: 10px;
   border: 2px solid black !important;
   border-radius: 5px;
-  background: white;
+  background: white url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="black" d="M2 5L0 3h4z"/></svg>') no-repeat right 10px center;
+  background-size: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   font-size: 16px;
-  margin-right: 10px;
+  width: 200px; /* Adjust width as needed */
+  margin-right: 20px; /* Increased margin-right for more space */
 }
 
 .filter-container label {
@@ -41,7 +46,7 @@
 }
 
 .highlighted {
-  background-color: #a4d9ff;
+  background-color: yellow;
 }
 
 .user-table {
