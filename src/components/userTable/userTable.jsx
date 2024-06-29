@@ -14,6 +14,7 @@ const UserTable = () => {
     const fetchData = async () => {
       try {
         const usersData = await getUsers();
+        console.log(usersData);
         const uniqueCities = [...new Set(usersData.map(user => user.address.city))];
         setCities(uniqueCities);
         setUsers(usersData);
@@ -38,7 +39,8 @@ const UserTable = () => {
   };
 
   const filteredUsers = users.filter(user => {
-    const nameMatches = `${user.firstName} ${user.lastName}`.toLowerCase().includes(filter.toLowerCase());
+    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+    const nameMatches = fullName.includes(filter.toLowerCase());
     const cityMatches = selectedCity === '' || user.address.city === selectedCity;
     return nameMatches && cityMatches;
   });
@@ -72,8 +74,7 @@ const UserTable = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
+              <th>Name</th>
               <th>Email</th>
               <th>City</th>
               <th>Birthday</th>
@@ -85,8 +86,7 @@ const UserTable = () => {
               return (
                 <tr key={user.id} className={isOldest ? 'highlighted' : ''}>
                   <td>{user.id}</td>
-                  <td>{user.firstName}</td>
-                  <td>{user.lastName}</td>
+                  <td>{`${user.firstName} ${user.lastName}`}</td>
                   <td>{user.email}</td>
                   <td>{user.address.city}</td>
                   <td>{user.birthDate}</td>
