@@ -1,6 +1,7 @@
 import dpsLogo from './assets/DPS.svg';
 import React, { useState, useEffect } from 'react';
-import UserTable from './components/userTable';
+import UserTable from './components/userTable/userTable';
+
 
 import './App.css';
 

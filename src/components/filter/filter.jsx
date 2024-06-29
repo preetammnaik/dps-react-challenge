@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Filter = ({ filter, onFilterChange, cities, selectedCity, onCityChange }) => {
+const Filter = ({ filter, onFilterChange, cities, selectedCity, onCityChange, highlightOldest, onHighlightChange }) => {
   return (
     <div className="filter-container">
       <input
@@ -15,6 +15,14 @@ const Filter = ({ filter, onFilterChange, cities, selectedCity, onCityChange }) 
           <option key={index} value={city}>{city}</option>
         ))}
       </select>
+      <label>
+        Highlight oldest per city
+        <input
+          type="checkbox"
+          checked={highlightOldest}
+          onChange={onHighlightChange}
+        />
+      </label>
     </div>
   );
 };

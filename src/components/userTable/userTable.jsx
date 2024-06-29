@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { getUsers } from '../services/userService';
+import { getUsers } from '../../services/userService';
 import './userTable.css';
-import Filter from '../components/filter/filter.jsx';
+import Filter from '../filter/filter.jsx';
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [cities, setCities] = useState([]);
+  const [highlightOldest, setHighlightOldest] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,11 +33,25 @@ const UserTable = () => {
     setSelectedCity(event.target.value);
   };
 
+  const handleHighlightChange = (event) => {
+    setHighlightOldest(event.target.checked);
+  };
+
   const filteredUsers = users.filter(user => {
     const nameMatches = `${user.firstName} ${user.lastName}`.toLowerCase().includes(filter.toLowerCase());
     const cityMatches = selectedCity === '' || user.address.city === selectedCity;
     return nameMatches && cityMatches;
   });
+
+  const oldestUsers = {};
+  if (highlightOldest) {
+    filteredUsers.forEach(user => {
+      const userCity = user.address.city;
+      if (!oldestUsers[userCity] || new Date(user.birthDate) < new Date(oldestUsers[userCity].birthDate)) {
+        oldestUsers[userCity] = user;
+      }
+    });
+  }
 
   return (
     <div className="user-table-container">
@@ -48,6 +63,8 @@ const UserTable = () => {
           cities={cities}
           selectedCity={selectedCity}
           onCityChange={handleCityChange}
+          highlightOldest={highlightOldest}
+          onHighlightChange={handleHighlightChange}
         />
       </div>
       {filteredUsers.length > 0 ? (
@@ -63,16 +80,19 @@ const UserTable = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map(user => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.firstName}</td>
-                <td>{user.lastName}</td>
-                <td>{user.email}</td>
-                <td>{user.address.city}</td>
-                <td>{user.birthDate}</td>
-              </tr>
-            ))}
+            {filteredUsers.map(user => {
+              const isOldest = highlightOldest && oldestUsers[user.address.city]?.id === user.id;
+              return (
+                <tr key={user.id} className={isOldest ? 'highlighted' : ''}>
+                  <td>{user.id}</td>
+                  <td>{user.firstName}</td>
+                  <td>{user.lastName}</td>
+                  <td>{user.email}</td>
+                  <td>{user.address.city}</td>
+                  <td>{user.birthDate}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       ) : (
