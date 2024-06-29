@@ -6,6 +6,7 @@ import Filter from '../filter/filter.jsx';
 const UserTable = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState('');
+  const [debouncedFilter, setDebouncedFilter] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [cities, setCities] = useState([]);
   const [highlightOldest, setHighlightOldest] = useState(false);
@@ -26,6 +27,16 @@ const UserTable = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedFilter(filter);
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [filter]);
+
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
@@ -40,7 +51,7 @@ const UserTable = () => {
 
   const filteredUsers = users.filter(user => {
     const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
-    const nameMatches = fullName.includes(filter.toLowerCase());
+    const nameMatches = fullName.includes(debouncedFilter.toLowerCase());
     const cityMatches = selectedCity === '' || user.address.city === selectedCity;
     return nameMatches && cityMatches;
   });
