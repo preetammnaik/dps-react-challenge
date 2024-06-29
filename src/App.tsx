@@ -20,7 +20,6 @@ function App() {
 				</a>
 			</div>
 			<div className="home-card">
-				<p>Your solution goes here 😊</p>
 				<UserTable />
 			</div>
 		</>
